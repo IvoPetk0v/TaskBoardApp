@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskBoardApp.Data;
 
@@ -11,9 +12,10 @@ using TaskBoardApp.Data;
 namespace TaskBoardApp.Data.Migrations
 {
     [DbContext(typeof(TaskBoardAppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230610113127_AddTasksAndBoardsAndSeedDb")]
+    partial class AddTasksAndBoardsAndSeedDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,18 +282,21 @@ namespace TaskBoardApp.Data.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
 
@@ -300,7 +305,7 @@ namespace TaskBoardApp.Data.Migrations
                         {
                             Id = 1,
                             BoardId = 1,
-                            CreatedOn = new DateTime(2022, 11, 22, 11, 46, 28, 709, DateTimeKind.Utc).AddTicks(8643),
+                            CreatedOn = new DateTime(2022, 11, 22, 11, 31, 27, 13, DateTimeKind.Utc).AddTicks(7907),
                             Description = "Implement better styling for all public pages",
                             OwnerId = "4f3bfce1-35e5-4cd9-9c79-12d4c5942a7c",
                             Title = "Improve CSS styles"
@@ -309,7 +314,7 @@ namespace TaskBoardApp.Data.Migrations
                         {
                             Id = 2,
                             BoardId = 1,
-                            CreatedOn = new DateTime(2023, 1, 10, 11, 46, 28, 709, DateTimeKind.Utc).AddTicks(8669),
+                            CreatedOn = new DateTime(2023, 1, 10, 11, 31, 27, 13, DateTimeKind.Utc).AddTicks(7931),
                             Description = "Create Android client App for the RESTful TaskBoard service",
                             OwnerId = "06ea3a5d-ee0a-439f-b3c9-97c929d17639",
                             Title = "Android Client App"
@@ -318,7 +323,7 @@ namespace TaskBoardApp.Data.Migrations
                         {
                             Id = 3,
                             BoardId = 2,
-                            CreatedOn = new DateTime(2023, 5, 10, 11, 46, 28, 709, DateTimeKind.Utc).AddTicks(8682),
+                            CreatedOn = new DateTime(2023, 5, 10, 11, 31, 27, 13, DateTimeKind.Utc).AddTicks(7935),
                             Description = "Create Desktop client App for the RESTful TaskBoard service",
                             OwnerId = "06ea3a5d-ee0a-439f-b3c9-97c929d17639",
                             Title = "Desktop Client App"
@@ -327,7 +332,7 @@ namespace TaskBoardApp.Data.Migrations
                         {
                             Id = 4,
                             BoardId = 3,
-                            CreatedOn = new DateTime(2022, 6, 10, 11, 46, 28, 709, DateTimeKind.Utc).AddTicks(8683),
+                            CreatedOn = new DateTime(2022, 6, 10, 11, 31, 27, 13, DateTimeKind.Utc).AddTicks(7936),
                             Description = "Implement [Create Task] page for adding tasks",
                             OwnerId = "06ea3a5d-ee0a-439f-b3c9-97c929d17639",
                             Title = "Create Tasks"
@@ -393,15 +398,13 @@ namespace TaskBoardApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Board");
 
-                    b.Navigation("Owner");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskBoardApp.Data.Models.Board", b =>
