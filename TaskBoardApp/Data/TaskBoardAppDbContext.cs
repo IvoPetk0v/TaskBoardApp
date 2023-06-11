@@ -1,11 +1,13 @@
 ﻿using System.Reflection;
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+using TaskBoardApp.Data.Models;
+using Task = TaskBoardApp.Data.Models.Task;
+
 namespace TaskBoardApp.Data
 {
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-
-    using Models;
 
     public class TaskBoardAppDbContext : IdentityDbContext
     {

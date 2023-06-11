@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using TaskBoardApp.Data;
 using TaskBoardApp.Models.Board;
 using TaskBoardApp.Models.Task;

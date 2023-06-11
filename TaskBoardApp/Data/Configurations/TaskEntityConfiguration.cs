@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using Task = TaskBoardApp.Data.Models.Task;
 
 namespace TaskBoardApp.Data.Configurations
