@@ -18,8 +18,8 @@ namespace TaskBoardApp.Models.Task
         [Display(Name = "Board")]
         public int BoardId { get; set; }
 
-        [ForeignKey(nameof(BoardId))] 
-        public IEnumerable<TaskBoardModel> Boards { get; set; } = new List<TaskBoardModel>();
+        [ForeignKey(nameof(BoardId))]
+        public IEnumerable<TaskBoardModel> Boards { get; set; } = new HashSet<TaskBoardModel>();
 
     }
 }
