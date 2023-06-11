@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskBoardApp.Data;
@@ -153,6 +154,51 @@ namespace TaskBoardApp.Controllers
             return RedirectToAction("All", "Board");
         }
 
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var task = await dbContext.Tasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return BadRequest();
+            }
+            string userId = GetUserId();
+            if (userId != task.OwnerId)
+            {
+                return Unauthorized();
+            }
+
+            TaskViewModel taskViewModel = new TaskViewModel()
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+            };
+            return View(taskViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(TaskViewModel taskModel)
+        {
+            var task = await dbContext.Tasks.FindAsync(taskModel.Id);
+
+            if (task == null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+            if (userId != task.OwnerId)
+            {
+                return Unauthorized();
+            }
+
+            dbContext.Remove(task);
+            await dbContext.SaveChangesAsync();
+
+            return RedirectToAction("All", "Board");
+        }
     }
 
 }
