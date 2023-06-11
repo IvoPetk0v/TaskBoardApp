@@ -36,26 +36,26 @@ namespace TaskBoardApp.Controllers
             });
 
         [HttpPost]
-        public async Task<IActionResult> Create(TaskFormModel model)
+        public async Task<IActionResult> Create(TaskFormModel taskModel)
         {
-            if (!GetBoards().Any(b => b.Id == model.BoardId))
+            if (!GetBoards().Any(b => b.Id == taskModel.BoardId))
             {
-                ModelState.AddModelError(nameof(model.BoardId),"Board does not exist.");
+                ModelState.AddModelError(nameof(taskModel.BoardId),"Board does not exist.");
             }
 
             string currentUserId = GetUserId();
             if (!ModelState.IsValid)
             {
-                model.Boards = GetBoards();
-                return View(model);
+                taskModel.Boards = GetBoards();
+                return View(taskModel);
             }
 
             Data.Models.Task task = new Data.Models.Task()
             {
-                Title = model.Title,
-                Description = model.Description,
+                Title = taskModel.Title,
+                Description = taskModel.Description,
                 CreatedOn = DateTime.Now,
-                BoardId = model.BoardId,
+                BoardId = taskModel.BoardId,
                 OwnerId = currentUserId
             };
             await dbContext.Tasks.AddAsync(task);
