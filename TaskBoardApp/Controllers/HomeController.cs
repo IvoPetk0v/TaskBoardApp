@@ -18,7 +18,9 @@ namespace TaskBoardApp.Controllers
         {
             this.dbContext = dbContext;
         }
+#pragma warning disable CS1998
         public async Task<IActionResult> Index()
+#pragma warning restore CS1998
         {
             var taskBoards = dbContext.Boards
                 .Select(b => b.Name)
@@ -26,7 +28,7 @@ namespace TaskBoardApp.Controllers
             var tasksCounts = new List<HomeBoardModel>();
             foreach (var boardName in taskBoards)
             {
-                var taskInBoard = dbContext.Tasks.Where(t => t.Board.Name == boardName).Count();
+                var taskInBoard = dbContext.Tasks.Where(t => t.Board!.Name == boardName).Count();
 
                 tasksCounts.Add(new HomeBoardModel()
                 {
@@ -36,7 +38,7 @@ namespace TaskBoardApp.Controllers
             }
 
             var userTasksCount = -1;
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 var currentUserId = GetUserId();
                 userTasksCount = dbContext.Tasks.Where(t => t.OwnerId == currentUserId).Count();

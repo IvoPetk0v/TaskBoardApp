@@ -80,7 +80,7 @@ namespace TaskBoardApp.Controllers
                     Title = t.Title,
                     Description = t.Description,
                     CreatedOn = t.CreatedOn.ToString("dd/MM/yyyy HH:mm"),
-                    Board = t.Board.Name,
+                    Board = t.Board!.Name,
                     Owner = t.Owner.UserName
                 }).FirstOrDefaultAsync();
 
