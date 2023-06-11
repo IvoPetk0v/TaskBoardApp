@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TaskBoardApp.Data;
 using TaskBoardApp.Data.Models;
 using TaskBoardApp.Models.Task;
+using Task = TaskBoardApp.Data.Models.Task;
 
 namespace TaskBoardApp.Controllers
 {
@@ -64,6 +66,28 @@ namespace TaskBoardApp.Controllers
         }
 
         private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var task = await dbContext
+                .Tasks
+                .Where(t=>t.Id==id)
+                .Select(t=> new TaskDetailsViewModel()
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    CreatedOn = t.CreatedOn.ToString("dd/MM/yyyy HH:mm"),
+                    Board = t.Board.Name,
+                    Owner = t.Owner.UserName
+                }).FirstOrDefaultAsync();
+            if (task == null)
+            {
+                return BadRequest();
+            }
+
+            return View(task);
+        }
 
     }
 
